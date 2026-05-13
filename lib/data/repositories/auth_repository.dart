@@ -7,14 +7,16 @@ class AuthRepository extends ChangeNotifier {
   AuthRepository({
     required ApiClient apiClient,
     FlutterSecureStorage? secureStorage,
-  })  : _apiClient = apiClient,
-        _secureStorage = secureStorage ?? const FlutterSecureStorage();
+  }) : _apiClient = apiClient,
+       _secureStorage = secureStorage ?? const FlutterSecureStorage();
 
   static const _tokenKey = 'cashguard_auth_token';
   static const _emailKey = 'cashguard_auth_email';
 
   final ApiClient _apiClient;
   final FlutterSecureStorage _secureStorage;
+
+  String get apiBaseUrl => _apiClient.baseUrl;
 
   bool initialized = false;
   String? token;
@@ -37,7 +39,8 @@ class AuthRepository extends ChangeNotifier {
     final data = await _apiClient.post('/auth/register', {
       'email': email,
       'password': password,
-      if (displayName != null && displayName.trim().isNotEmpty) 'displayName': displayName.trim(),
+      if (displayName != null && displayName.trim().isNotEmpty)
+        'displayName': displayName.trim(),
     });
     await _saveSession(data);
   }

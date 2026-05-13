@@ -52,15 +52,18 @@ class _AuthScreenState extends State<AuthScreen> {
       }
     } catch (error) {
       if (mounted) {
-        setState(() => _errorMessage = _connectionErrorMessage(error));
+        final apiBaseUrl = AuthScope.of(context).apiBaseUrl;
+        setState(
+          () => _errorMessage = _connectionErrorMessage(error, apiBaseUrl),
+        );
       }
     } finally {
       if (mounted) setState(() => _loading = false);
     }
   }
 
-  String _connectionErrorMessage(Object error) {
-    return 'Could not reach the CashGuard API at http://127.0.0.1:8080. '
+  String _connectionErrorMessage(Object error, String apiBaseUrl) {
+    return 'Could not reach the CashGuard API at $apiBaseUrl. '
         'Make sure the server is running, then try again.\n\n$error';
   }
 
